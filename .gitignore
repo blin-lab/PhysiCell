@@ -3,3 +3,6 @@
 unit-test-conservation.exe
 Makefile-backup
 *.exe
+.cproject
+.project
+.settings/
