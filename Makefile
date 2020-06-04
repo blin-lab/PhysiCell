@@ -92,6 +92,15 @@ template:
 	cp ./config/PhysiCell_settings.xml ./config/PhysiCell_settings-backup.xml 
 	cp ./sample_projects/template/config/* ./config/
 	
+chemotaxis2D: 
+	cp ./sample_projects/chemotaxis2D/custom_modules/* ./custom_modules/
+	touch main.cpp && cp main.cpp main-backup.cpp
+	cp ./sample_projects/chemotaxis2D/main-2D.cpp ./main.cpp 
+	cp Makefile Makefile-backup
+	cp ./sample_projects/chemotaxis2D/Makefile .
+	cp ./config/PhysiCell_settings.xml ./config/PhysiCell_settings-backup.xml 
+	cp ./sample_projects/chemotaxis2D/config/* ./config/	
+	
 # sample projects 
 
 biorobots-sample:
