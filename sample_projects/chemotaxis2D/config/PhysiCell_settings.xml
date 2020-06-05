@@ -159,6 +159,11 @@
 		<random_seed type="int" units="dimensionless">0</random_seed> 
 		<!-- example parameters from the template --> 
 		
+		<!-- Confinement and passive cell parameter -->
+		<passive_cell_radius type="double" units="min">5.0</passive_cell_radius>
+		<geom_x type="double" units="min">400.0</geom_x>
+		<geom_y type="double" units="min">100.0</geom_y>
+		
 		<!-- secretor cell type parameters --> 
 		<chemokine_secretion_rate type="double" units="min">15.0</chemokine_secretion_rate>
 		<chemokine_uptake_rate type="double" units="min">0.0</chemokine_uptake_rate>

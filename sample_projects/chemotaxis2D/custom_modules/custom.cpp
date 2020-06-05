@@ -166,7 +166,7 @@ void create_cell_types( void )
 	passive_cell.phenotype.mechanics.cell_cell_repulsion_strength = 50.0;
 
 	// Adjust cycle
-	passive_cell.phenotype.geometry.radius = 10.0;
+	passive_cell.phenotype.geometry.radius = parameters.doubles("passive_cell_radius");
 
 	// set oxygen uptake / secretion parameters for the default cell type
 	passive_cell.phenotype.secretion.uptake_rates[chemokine_substrate_index] = 0;
@@ -217,21 +217,21 @@ void setup_microenvironment( void )
 
 void setup_tissue( void )
 {
-	// create cells evenly distributed within an ellipse
 
+	// create cells randomly distributed within an ellipse
 
-	const double xRadius = 400;
-	const double yRadius = 100;
+	const double xRadius = parameters.doubles("geom_x");
+	const double yRadius = parameters.doubles("geom_y");
 	const int N = 200;
-	const double passiveRad = 10; // radius of passive cell
-	const double passiveD = 20; // radius of passive cell
+	const double passiveRad = parameters.doubles("passive_cell_radius"); // radius of passive cell
+	const double passiveD = passiveRad * 2; // diameter of passive cell
 
 	// domain for passive cells
-	const int pWidth = xRadius + 6 * passiveRad;
-	const int pHeight = yRadius + 6 * passiveRad;
+	const int pWidth = xRadius + 3 * passiveD;
+	const int pHeight = yRadius + 3 * passiveD;
 
-	const double xR_squared = pow(xRadius,2);
-	const double yR_squared = pow(yRadius,2);
+	const double xR_squared = xRadius * xRadius;
+	const double yR_squared = yRadius * yRadius;
 
 
 	Cell* pC;
@@ -244,8 +244,8 @@ void setup_tissue( void )
 
 			// Check if point is within ellipse
 
-			double x_term = pow(w,2) / xR_squared;
-			double y_term = pow(h,2) / yR_squared;
+			double x_term = w*w / xR_squared;
+			double y_term = h*h / yR_squared;
 
 			// create only if outside
 			if( x_term + y_term > 1){
