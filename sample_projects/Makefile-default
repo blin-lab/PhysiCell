@@ -62,7 +62,7 @@ all:
 
 # sample projects 	
 list-projects:
-	@echo "Sample projects: template2D template3D biorobots-sample cancer-biorobots-sample heterogeneity-sample"
+	@echo "Sample projects: template2D chemotaxis2D random_cell_placement template3D biorobots-sample cancer-biorobots-sample heterogeneity-sample"
 	@echo "                 cancer-immune-sample virus-macrophage-sample template"
 	
 template2D: 
@@ -74,6 +74,7 @@ template2D:
 	cp ./config/PhysiCell_settings.xml ./config/PhysiCell_settings-backup.xml 
 	cp ./sample_projects/template2D/config/* ./config/
 	
+
 template3D: 	
 	cp ./sample_projects/template3D/custom_modules/* ./custom_modules/
 	touch main.cpp && cp main.cpp main-backup.cpp
@@ -82,7 +83,26 @@ template3D:
 	cp ./sample_projects/template3D/Makefile .
 	cp ./config/PhysiCell_settings.xml ./config/PhysiCell_settings-backup.xml 
 	cp ./sample_projects/template3D/config/* ./config/
-	
+
+chemotaxis2D:
+
+	cp ./sample_projects/chemotaxis2D/custom_modules/* ./custom_modules/
+	touch main.cpp && cp main.cpp main-backup.cpp
+	cp ./sample_projects/chemotaxis2D/main-2D.cpp ./main.cpp 
+	cp Makefile Makefile-backup
+	cp ./sample_projects/chemotaxis2D/Makefile .
+	cp ./config/PhysiCell_settings.xml ./config/PhysiCell_settings-backup.xml 
+	cp ./sample_projects/chemotaxis2D/config/* ./config/
+
+random_cell_placement:
+	cp ./sample_projects/random_cell_placement/custom_modules/* ./custom_modules/
+	touch main.cpp && cp main.cpp main-backup.cpp
+	cp ./sample_projects/random_cell_placement/main-2D.cpp ./main.cpp
+	cp Makefile Makefile-backup
+	cp ./sample_projects/random_cell_placement/Makefile .
+	cp ./config/PhysiCell_settings.xml ./config/PhysiCell_settings-backup.xml
+	cp ./sample_projects/random_cell_placement/config/* ./config/	
+
 template:
 	cp ./sample_projects/template/custom_modules/* ./custom_modules/
 	touch main.cpp && cp main.cpp main-backup.cpp
