@@ -132,12 +132,12 @@
 			<Dirichlet_boundary_condition units="mmHg" enabled="true">38.0</Dirichlet_boundary_condition>
 		</variable>
 		
-		<variable name="chemokine" units="mmHg" ID="0">
+		<variable name="chemokine" units="mmHg" ID="1">
 			<physical_parameter_set>
 				<diffusion_coefficient units="micron^2/min">100000.0</diffusion_coefficient>
 				<decay_rate units="1/min">0.1</decay_rate>  
 			</physical_parameter_set>
-			<initial_condition units="mmHg">38.0</initial_condition>
+			<initial_condition units="mmHg">0</initial_condition> //no chemokine in evironment to start with
 			<Dirichlet_boundary_condition units="mmHg" enabled="true">38.0</Dirichlet_boundary_condition>
 		</variable>
 		
@@ -166,6 +166,10 @@
 		<motile_cell_relative_adhesion type="double" units="dimensionless">0.05</motile_cell_relative_adhesion>
 		<motile_cell_apoptosis_rate type="double" units="1/min">0.0</motile_cell_apoptosis_rate> 
 		<motile_cell_relative_cycle_entry_rate type="double" units="dimensionless">0.1</motile_cell_relative_cycle_entry_rate>
+	
+		<!-- chemokine cell type parameters -->
+		<chemokine_cell_secretion_rate type="double" units="min">5</chemokine_cell_secretion_rate>
+		<chemokine_cell_secretion_rate type="double" units="min">15</chemokine_cell_secretion_rate>
 	</user_parameters>
 	
 </PhysiCell_settings>

@@ -77,6 +77,8 @@ void tumor_cell_phenotype_with_oncoprotein( Cell* pCell, Phenotype& phenotype, d
 
 extern Cell_Definition motile_cell; 
 extern Cell_Definition passive_cell;
+// added chemokine cell
+extern Cell_Definition chemokine_cell;
 
 // custom cell phenotype functions could go here 
 

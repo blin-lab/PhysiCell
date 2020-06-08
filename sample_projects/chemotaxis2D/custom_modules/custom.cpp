@@ -64,7 +64,6 @@
 #                                                                             #
 ###############################################################################
  */
-// testing comment
 
 #include "./custom.h"
 
@@ -197,11 +196,43 @@ void create_cell_types( void )
 	motile_cell.phenotype.cycle.data.transition_rate(G0G1_index,S_index) *= 
 			parameters.doubles( "motile_cell_relative_cycle_entry_rate" ); // 0.1;
 
+	//copied motile cell type and modified
+	chemokine_cell = cell_defaults;
+	chemokine_cell.type = 3;
+	chemokine_cell.name = "chemokine cell";
 
+	// make sure the new cell type has its own reference phenotype
 
+	chemokine_cell.parameters.pReference_live_phenotype = &( chemokine_cell.phenotype );
 
+	// enable random motility
+	chemokine_cell.phenotype.motility.is_motile = true;
+	chemokine_cell.phenotype.motility.persistence_time = parameters.doubles( "chemokine_cell_persistence_time" ); // 15.0;
+	chemokine_cell.phenotype.motility.migration_speed = parameters.doubles( "chemokine_cell_migration_speed" ); // 0.25 micron/minute
 
+	// Set cell-cell adhesion to 5% of other cells
+	chemokine_cell.phenotype.mechanics.cell_cell_adhesion_strength *= parameters.doubles( "chemokine_cell_relative_adhesion" ); // 0.05;
 
+	// Set apoptosis to zero
+	chemokine_cell.phenotype.death.rates[apoptosis_model_index] = parameters.doubles( "chemokine_cell_apoptosis_rate" ); // 0.0;
+
+	// Set proliferation to 10% of other cells.
+	// Alter the transition rate from G0G1 state to S state
+	chemokine_cell.phenotype.cycle.data.transition_rate(G0G1_index,S_index) *=
+				parameters.doubles( "chemokine_cell_relative_cycle_entry_rate" ); // 0.1;
+
+	//Copied oxygen secretion and uptake parameters from default
+	int chemokine_substrate_index = microenvironment.find_density_index( "chemokine" );
+	chemokine_cell.phenotype.secretion.uptake_rates[chemokine_substrate_index] = parameters.doubles("chemokine_cell_uptake_rate");
+	chemokine_cell.phenotype.secretion.secretion_rates[chemokine_substrate_index] = parameters.doubles("chemokine_cell_secretion_rate");
+	//chemokine_cell.phenotype.secretion.saturation_densities[chemokine_substrate_index] = 38;
+
+	//	How to use these?
+	chemokine_cell.phenotype.motility.chemotaxis_index[chemokine_substrate_index];
+	//(1 to go up gradient, -1 to go down gradient)
+	chemokine_cell.phenotype.motility.chemotaxis_direction = 1;
+
+	//need to incorporate another cell type which does not uptake or secrete chemokine
 
 	build_cell_definitions_maps(); 
 	display_cell_definitions( std::cout ); 
@@ -280,7 +311,8 @@ void setup_tissue( void )
 		double x = xRadius * d * cos(t);
 		double y = yRadius * d * sin(t);
 
-		pC = create_cell( motile_cell );
+		//changed this to chemokine_cell
+		pC = create_cell( chemokine_cell );
 		pC->assign_position( x, y, 0.0 );
 	}
 
@@ -313,5 +345,11 @@ std::vector<std::string> my_coloring_function( Cell* pCell )
 		output[2] = "grey";
 	}
 
+	//added this to colour chemokine cells in orange
+	if( pCell->type == 3 )
+	{
+		output[0] = "orange";
+		output[2] = "orange";
+	}
 	return output; 
 }
