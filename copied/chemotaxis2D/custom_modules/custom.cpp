@@ -71,7 +71,6 @@
 
 Cell_Definition motile_cell; 
 Cell_Definition passive_cell;
-Cell_Definition chemokine_cell;
 
 
 void create_cell_types( void )
@@ -228,8 +227,8 @@ void create_cell_types( void )
 	chemokine_cell.phenotype.secretion.secretion_rates[chemokine_substrate_index] = parameters.doubles("chemokine_cell_secretion_rate");
 	//chemokine_cell.phenotype.secretion.saturation_densities[chemokine_substrate_index] = 38;
 
-	//	How to use these? Need to enable chemotaxis?
-	chemokine_cell.phenotype.motility.chemotaxis_index = 1;
+	//	How to use these?
+	chemokine_cell.phenotype.motility.chemotaxis_index[chemokine_substrate_index];
 	//(1 to go up gradient, -1 to go down gradient)
 	chemokine_cell.phenotype.motility.chemotaxis_direction = 1;
 
@@ -306,10 +305,8 @@ void setup_tissue( void )
 
 
 	// Now generate cells within the ellipse
-	//changed to N/2, So half cells are chemokine and half are motile
-	for (int i=0; i<(N/2); i++){
-		//double t = 2*M_PI * ((double) rand() / RAND_MAX) ;
-		double t = 2*3.14 * ((double) rand() / RAND_MAX) ;
+	for (int i=0; i<N; i++){
+		double t = 2*M_PI * ((double) rand() / RAND_MAX) ;
 		double d = sqrt(((double) rand() / RAND_MAX));
 		double x = xRadius * d * cos(t);
 		double y = yRadius * d * sin(t);
@@ -319,17 +316,6 @@ void setup_tissue( void )
 		pC->assign_position( x, y, 0.0 );
 	}
 
-	for (int i=0; i<(N/2); i++){
-		//double t = 2*M_PI * ((double) rand() / RAND_MAX) ;
-		double t = 2*3.14 * ((double) rand() / RAND_MAX) ;
-		double d = sqrt(((double) rand() / RAND_MAX));
-		double x = xRadius * d * cos(t);
-		double y = yRadius * d * sin(t);
-
-		//changed this to motile_cell
-		pC = create_cell( motile_cell );
-		pC->assign_position( x, y, 0.0 );
-	}
 	// now create a motile cell 
 	//pC = create_cell( motile_cell );
 	//pC->assign_position( 0.0, 0.0, 0.0 );

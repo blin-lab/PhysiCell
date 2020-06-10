@@ -63,16 +63,13 @@
 # POSSIBILITY OF SUCH DAMAGE.                                                 #
 #                                                                             #
 ###############################################################################
- */
+*/
 
 #include "./custom.h"
 
 // declare cell definitions here 
 
 Cell_Definition motile_cell; 
-Cell_Definition passive_cell;
-Cell_Definition chemokine_cell;
-
 
 void create_cell_types( void )
 {
@@ -80,37 +77,37 @@ void create_cell_types( void )
 	// same initial histogram of oncoprotein, even if threading means 
 	// that future division and other events are still not identical 
 	// for all runs 
-
+	
 	SeedRandom( parameters.ints("random_seed") ); // or specify a seed here 
-
+	
 	// housekeeping 
-
+	
 	initialize_default_cell_definition();
 	cell_defaults.phenotype.secretion.sync_to_microenvironment( &microenvironment ); 
-
+	
 	// Name the default cell type 
-
+	
 	cell_defaults.type = 0; 
 	cell_defaults.name = "tumor cell"; 
-
+	
 	// set default cell cycle model 
 
 	cell_defaults.functions.cycle_model = flow_cytometry_separated_cycle_model; 
-
+	
 	// set default_cell_functions; 
-
+	
 	cell_defaults.functions.update_phenotype = update_cell_and_death_parameters_O2_based; 
-
+	
 	// needed for a 2-D simulation: 
-
+	
 	/* grab code from heterogeneity */ 
-
+	
 	cell_defaults.functions.set_orientation = up_orientation; 
 	cell_defaults.phenotype.geometry.polarity = 1.0;
 	cell_defaults.phenotype.motility.restrict_to_2D = true; 
-
+	
 	// make sure the defaults are self-consistent. 
-
+	
 	cell_defaults.phenotype.secretion.sync_to_microenvironment( &microenvironment );
 	cell_defaults.phenotype.molecular.sync_to_microenvironment( &microenvironment );	
 	cell_defaults.phenotype.sync_to_functions( cell_defaults.functions ); 
@@ -132,238 +129,125 @@ void create_cell_types( void )
 	cell_defaults.phenotype.secretion.uptake_rates[oxygen_substrate_index] = 10; 
 	cell_defaults.phenotype.secretion.secretion_rates[oxygen_substrate_index] = 0; 
 	cell_defaults.phenotype.secretion.saturation_densities[oxygen_substrate_index] = 38; 
-
+	
 	// add custom data here, if any 
-
-
-	// Defining passive cells
-	passive_cell = cell_defaults;
-	passive_cell.type = 1;
-	passive_cell.name = "passive cell";
-
-	// make sure the new cell type has its own reference phenotype
-
-	passive_cell.parameters.pReference_live_phenotype = &( passive_cell.phenotype );
-
-	// must be completely immobile
-	passive_cell.phenotype.motility.is_motile = false;
-
-	// Set cell-cell adhesion to 0% of other cells
-	passive_cell.phenotype.mechanics.cell_cell_adhesion_strength *= 0.0;
-	// Set strong resistance to deformation since these are used to enforce confinement
-	passive_cell.phenotype.mechanics.cell_cell_repulsion_strength = 10.0;
-
-	// Adjust cycle
-	passive_cell.phenotype.geometry.radius = 10.0;
-
-	passive_cell.phenotype.death.rates[apoptosis_model_index] = 0.0;
-	// set oxygen uptake / secretion parameters for the default cell type
-	passive_cell.phenotype.secretion.uptake_rates[oxygen_substrate_index] = 0;
-	passive_cell.phenotype.secretion.secretion_rates[oxygen_substrate_index] = 0;
-
-	// Set proliferation to 10% of other cells.
-	// Alter the transition rate from G0G1 state to S state
-	passive_cell.phenotype.cycle.data.transition_rate(G0G1_index,S_index) *= 0.0;
-
+	
 
 	// Now, let's define another cell type. 
 	// It's best to just copy the default and modify it. 
-
+	
 	// make this cell type randomly motile, less adhesive, greater survival, 
 	// and less proliferative 
-
+	
 	motile_cell = cell_defaults; 
-	motile_cell.type = 2;
+	motile_cell.type = 1; 
 	motile_cell.name = "motile tumor cell"; 
-
+	
 	// make sure the new cell type has its own reference phenotype
-
+	
 	motile_cell.parameters.pReference_live_phenotype = &( motile_cell.phenotype ); 
-
+	
 	// enable random motility 
 	motile_cell.phenotype.motility.is_motile = true; 
 	motile_cell.phenotype.motility.persistence_time = parameters.doubles( "motile_cell_persistence_time" ); // 15.0; 
 	motile_cell.phenotype.motility.migration_speed = parameters.doubles( "motile_cell_migration_speed" ); // 0.25 micron/minute 
 	motile_cell.phenotype.motility.migration_bias = 0.0;// completely random 
-
+	
 	// Set cell-cell adhesion to 5% of other cells 
 	motile_cell.phenotype.mechanics.cell_cell_adhesion_strength *= parameters.doubles( "motile_cell_relative_adhesion" ); // 0.05; 
-
+	
 	// Set apoptosis to zero 
 	motile_cell.phenotype.death.rates[apoptosis_model_index] = parameters.doubles( "motile_cell_apoptosis_rate" ); // 0.0; 
-
+	
 	// Set proliferation to 10% of other cells. 
 	// Alter the transition rate from G0G1 state to S state
 	motile_cell.phenotype.cycle.data.transition_rate(G0G1_index,S_index) *= 
-			parameters.doubles( "motile_cell_relative_cycle_entry_rate" ); // 0.1;
-
-	//copied motile cell type and modified
-	chemokine_cell = cell_defaults;
-	chemokine_cell.type = 3;
-	chemokine_cell.name = "chemokine cell";
-
-	// make sure the new cell type has its own reference phenotype
-
-	chemokine_cell.parameters.pReference_live_phenotype = &( chemokine_cell.phenotype );
-
-	// enable random motility
-	chemokine_cell.phenotype.motility.is_motile = true;
-	chemokine_cell.phenotype.motility.persistence_time = parameters.doubles( "chemokine_cell_persistence_time" ); // 15.0;
-	chemokine_cell.phenotype.motility.migration_speed = parameters.doubles( "chemokine_cell_migration_speed" ); // 0.25 micron/minute
-
-	// Set cell-cell adhesion to 5% of other cells
-	chemokine_cell.phenotype.mechanics.cell_cell_adhesion_strength *= parameters.doubles( "chemokine_cell_relative_adhesion" ); // 0.05;
-
-	// Set apoptosis to zero
-	chemokine_cell.phenotype.death.rates[apoptosis_model_index] = parameters.doubles( "chemokine_cell_apoptosis_rate" ); // 0.0;
-
-	// Set proliferation to 10% of other cells.
-	// Alter the transition rate from G0G1 state to S state
-	chemokine_cell.phenotype.cycle.data.transition_rate(G0G1_index,S_index) *=
-				parameters.doubles( "chemokine_cell_relative_cycle_entry_rate" ); // 0.1;
-
-	//Copied oxygen secretion and uptake parameters from default
-	int chemokine_substrate_index = microenvironment.find_density_index( "chemokine" );
-	chemokine_cell.phenotype.secretion.uptake_rates[chemokine_substrate_index] = parameters.doubles("chemokine_cell_uptake_rate");
-	chemokine_cell.phenotype.secretion.secretion_rates[chemokine_substrate_index] = parameters.doubles("chemokine_cell_secretion_rate");
-	//chemokine_cell.phenotype.secretion.saturation_densities[chemokine_substrate_index] = 38;
-
-	//	How to use these? Need to enable chemotaxis?
-	chemokine_cell.phenotype.motility.chemotaxis_index = 1;
-	//(1 to go up gradient, -1 to go down gradient)
-	chemokine_cell.phenotype.motility.chemotaxis_direction = 1;
-
-	//need to incorporate another cell type which does not uptake or secrete chemokine
-
+		parameters.doubles( "motile_cell_relative_cycle_entry_rate" ); // 0.1; 
+		
 	build_cell_definitions_maps(); 
 	display_cell_definitions( std::cout ); 
-
+	
 	return; 
 }
 
 void setup_microenvironment( void )
 {
-
-
+	// set domain parameters 
+	
+/* now this is in XML 
+	default_microenvironment_options.X_range = {-1000, 1000}; 
+	default_microenvironment_options.Y_range = {-1000, 1000}; 
+	default_microenvironment_options.simulate_2D = true; 
+*/
+	
 	// make sure to override and go back to 2D 
 	if( default_microenvironment_options.simulate_2D == false )
 	{
 		std::cout << "Warning: overriding XML config option and setting to 2D!" << std::endl; 
 		default_microenvironment_options.simulate_2D = true; 
 	}
+	
+/* now this is in XML 	
+	// no gradients need for this example 
 
+	default_microenvironment_options.calculate_gradients = false; 
+	
+	// set Dirichlet conditions 
 
+	default_microenvironment_options.outer_Dirichlet_conditions = true;
+	
+	// if there are more substrates, resize accordingly 
+	std::vector<double> bc_vector( 1 , 38.0 ); // 5% o2
+	default_microenvironment_options.Dirichlet_condition_vector = bc_vector;
+	
+	// set initial conditions 
+	default_microenvironment_options.initial_condition_vector = { 38.0 }; 
+*/
+	
 	// put any custom code to set non-homogeneous initial conditions or 
 	// extra Dirichlet nodes here. 
-
+	
 	// initialize BioFVM 
-
+	
 	initialize_microenvironment(); 	
-
+	
 	return; 
 }
 
 void setup_tissue( void )
 {
-	// create cells evenly distributed within an ellipse
-
-
-	const double xRadius = 400;
-	const double yRadius = 100;
-	const int N = 100;
-	const double passiveRad = 10; // radius of passive cell
-	const double passiveD = 20; // radius of passive cell
-
-	// domain for passive cells
-	const int pWidth = xRadius + 6 * passiveRad;
-	const int pHeight = yRadius + 6 * passiveRad;
-
-	const double xR_squared = pow(xRadius,2);
-	const double yR_squared = pow(yRadius,2);
-
-
+	// create some cells near the origin
+	
 	Cell* pC;
 
-	// Generate passive cells confinement (at the contour of the ellipse)
-	for (int w= -pWidth; w<pWidth; w+= passiveD){
-		for (int h= -pHeight; h<pHeight; h+=passiveD){
+	pC = create_cell(); 
+	pC->assign_position( 0.0, 0.0, 0.0 );
 
-
-			// Check if point is within ellipse
-
-			double x_term = pow(w,2) / xR_squared;
-			double y_term = pow(h,2) / yR_squared;
-
-			// create only if outside
-			if( x_term + y_term > 1){
-				pC = create_cell(passive_cell);
-				pC->assign_position( w, h, 0.0 );
-			}
-
-
-		}
-	}
-
-
-	// Now generate cells within the ellipse
-	//changed to N/2, So half cells are chemokine and half are motile
-	for (int i=0; i<(N/2); i++){
-		//double t = 2*M_PI * ((double) rand() / RAND_MAX) ;
-		double t = 2*3.14 * ((double) rand() / RAND_MAX) ;
-		double d = sqrt(((double) rand() / RAND_MAX));
-		double x = xRadius * d * cos(t);
-		double y = yRadius * d * sin(t);
-
-		//changed this to chemokine_cell
-		pC = create_cell( chemokine_cell );
-		pC->assign_position( x, y, 0.0 );
-	}
-
-	for (int i=0; i<(N/2); i++){
-		//double t = 2*M_PI * ((double) rand() / RAND_MAX) ;
-		double t = 2*3.14 * ((double) rand() / RAND_MAX) ;
-		double d = sqrt(((double) rand() / RAND_MAX));
-		double x = xRadius * d * cos(t);
-		double y = yRadius * d * sin(t);
-
-		//changed this to motile_cell
-		pC = create_cell( motile_cell );
-		pC->assign_position( x, y, 0.0 );
-	}
+	pC = create_cell(); 
+	pC->assign_position( -100, 0, 0.0 );
+	
+	pC = create_cell(); 
+	pC->assign_position( 0, 100, 0.0 );
+	
 	// now create a motile cell 
-	//pC = create_cell( motile_cell );
-	//pC->assign_position( 0.0, 0.0, 0.0 );
-
-
+	
+	pC = create_cell( motile_cell ); 
+	pC->assign_position( 15.0, -18.0, 0.0 );
+	
 	return; 
 }
-
-
-
-
 
 std::vector<std::string> my_coloring_function( Cell* pCell )
 {
 	// start with flow cytometry coloring 
-
+	
 	std::vector<std::string> output = false_cell_coloring_cytometry(pCell); 
-
-	//if( pCell->phenotype.death.dead == false && pCell->type == 2 )
-	//{
-	//	output[0] = "black";
-	//	output[2] = "black";
-	//}
-	if( pCell->type == 1 )
+		
+	if( pCell->phenotype.death.dead == false && pCell->type == 1 )
 	{
-		output[0] = "grey";
-		output[2] = "grey";
+		 output[0] = "black"; 
+		 output[2] = "black"; 
 	}
-
-	//added this to colour chemokine cells in orange
-	if( pCell->type == 3 )
-	{
-		output[0] = "orange";
-		output[2] = "orange";
-	}
+	
 	return output; 
 }

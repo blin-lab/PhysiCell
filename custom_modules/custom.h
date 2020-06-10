@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
 /*
 ###############################################################################
 # If you use PhysiCell in your project, please cite PhysiCell and the version #
@@ -66,112 +64,32 @@
 #                                                                             #
 ###############################################################################
 */
---> 
 
-<!--
-<user_details />
--->
+#include "../core/PhysiCell.h"
+#include "../modules/PhysiCell_standard_modules.h" 
 
-<PhysiCell_settings version="devel-version">
-	<domain>
-		<x_min>-500</x_min>
-		<x_max>500</x_max>
-		<y_min>-500</y_min>
-		<y_max>500</y_max>
-		<z_min>-10</z_min>
-		<z_max>10</z_max>
-		<dx>20</dx>
-		<dy>20</dy>
-		<dz>20</dz>
-		<use_2D>true</use_2D>
-	</domain>
-	
-	<overall>
-		<max_time units="min">20160</max_time> <!-- 5 days * 24 h * 60 min -->
-		<time_units>min</time_units>
-		<space_units>micron</space_units>
-	
-		<dt_diffusion units="min">0.01</dt_diffusion>
-		<dt_mechanics units="min">0.1</dt_mechanics>
-		<dt_phenotype units="min">6</dt_phenotype>	
-	</overall>
-	
-	<parallel>
-		<omp_num_threads>4</omp_num_threads>
-	</parallel> 
-	
-	<save>
-		<folder>output</folder> <!-- use . for root --> 
+using namespace BioFVM; 
+using namespace PhysiCell;
 
-		<full_data>
-			<interval units="min">1440</interval>
-			<enable>true</enable>
-		</full_data>
-		
-		<SVG>
-			<interval units="min">60</interval>
-			<enable>true</enable>
-		</SVG>
-		
-		<legacy_data>
-			<enable>false</enable>
-		</legacy_data>
-	</save>
-	
-	<options>
-		<legacy_random_points_on_sphere_in_divide>false</legacy_random_points_on_sphere_in_divide>
-	</options>	
+void tumor_cell_phenotype_with_oncoprotein( Cell* pCell, Phenotype& phenotype, double dt ); 
 
-	<microenvironment_setup>
-		<variable name="oxygen" units="mmHg" ID="0">
-			<physical_parameter_set>
-				<diffusion_coefficient units="micron^2/min">100000.0</diffusion_coefficient>
-				<decay_rate units="1/min">0.1</decay_rate>  
-			</physical_parameter_set>
-			<initial_condition units="mmHg">38.0</initial_condition>
-			<Dirichlet_boundary_condition units="mmHg" enabled="true">38.0</Dirichlet_boundary_condition>
-		</variable>
-		
-		<variable name="chemokine" units="mmHg" ID="1">
-			<physical_parameter_set>
-				<diffusion_coefficient units="micron^2/min">100000.0</diffusion_coefficient>
-				<decay_rate units="1/min">0.1</decay_rate>  
-			</physical_parameter_set>
-			<initial_condition units="mmHg">5</initial_condition> //no chemokine in evironment to start with
-			<Dirichlet_boundary_condition units="mmHg" enabled="true">40</Dirichlet_boundary_condition>
-		</variable>
-		
-		<options>
-			<calculate_gradients>true</calculate_gradients>
-			<track_internalized_substrates_in_each_agent>true</track_internalized_substrates_in_each_agent>
-			<!-- not yet supported --> 
-			<initial_condition type="matlab" enabled="false">
-				<filename>./config/initial.mat</filename>
-			</initial_condition>
-			<!-- not yet supported --> 
-			<dirichlet_nodes type="matlab" enabled="false">
-				<filename>./config/dirichlet.mat</filename>
-			</dirichlet_nodes>
-		</options>
-	</microenvironment_setup>	
-	
-	<user_parameters>
-		<random_seed type="int" units="dimensionless">0</random_seed> 
-		<!-- example parameters from the template --> 
-		
-		<!-- motile cell type parameters --> 
+// any additional cell types (beyond cell_defaults)
 
-		<motile_cell_persistence_time type="double" units="min">15</motile_cell_persistence_time>
-		<motile_cell_migration_speed type="double" units="micron/min">0.5</motile_cell_migration_speed> 
-		<motile_cell_relative_adhesion type="double" units="dimensionless">0.05</motile_cell_relative_adhesion>
-		<motile_cell_apoptosis_rate type="double" units="1/min">0.0</motile_cell_apoptosis_rate> 
-		<motile_cell_relative_cycle_entry_rate type="double" units="dimensionless">0.1</motile_cell_relative_cycle_entry_rate>
-	
-		<!-- chemokine cell type parameters -->
-		<chemotaxis>enabled</chemotaxis>
-		<chemokine_cell_migration_speed type="double" units="micron/min">0.5</chemokine_cell_migration_speed> 
-		<chemokine_cell_secretion_rate type="double" units="min">10</chemokine_cell_secretion_rate>
-		<chemokine_cell_uptake_rate type="double" units="min">3</chemokine_cell_uptake_rate>
-	</user_parameters>
-	
-</PhysiCell_settings>
+extern Cell_Definition motile_cell; 
+extern Cell_Definition passive_cell;
+// added chemokine cell
+extern Cell_Definition chemokine_cell;
+
+// custom cell phenotype functions could go here 
+
+// setup functions to help us along 
+
+void create_cell_types( void );
+void setup_tissue( void ); 
+
+// set up the BioFVM microenvironment 
+void setup_microenvironment( void ); 
+
+// custom pathology coloring function 
+
+std::vector<std::string> my_coloring_function( Cell* );

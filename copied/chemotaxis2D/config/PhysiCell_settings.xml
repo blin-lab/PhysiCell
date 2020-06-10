@@ -87,7 +87,7 @@
 	</domain>
 	
 	<overall>
-		<max_time units="min">20160</max_time> <!-- 5 days * 24 h * 60 min -->
+		<max_time units="min">7200</max_time> <!-- 5 days * 24 h * 60 min -->
 		<time_units>min</time_units>
 		<space_units>micron</space_units>
 	
@@ -104,7 +104,7 @@
 		<folder>output</folder> <!-- use . for root --> 
 
 		<full_data>
-			<interval units="min">1440</interval>
+			<interval units="min">360</interval>
 			<enable>true</enable>
 		</full_data>
 		
@@ -137,8 +137,8 @@
 				<diffusion_coefficient units="micron^2/min">100000.0</diffusion_coefficient>
 				<decay_rate units="1/min">0.1</decay_rate>  
 			</physical_parameter_set>
-			<initial_condition units="mmHg">5</initial_condition> //no chemokine in evironment to start with
-			<Dirichlet_boundary_condition units="mmHg" enabled="true">40</Dirichlet_boundary_condition>
+			<initial_condition units="mmHg">0</initial_condition> //no chemokine in evironment to start with
+			<Dirichlet_boundary_condition units="mmHg" enabled="true">38.0</Dirichlet_boundary_condition>
 		</variable>
 		
 		<options>
@@ -160,7 +160,7 @@
 		<!-- example parameters from the template --> 
 		
 		<!-- motile cell type parameters --> 
-
+		<motile_cell_chemokine_secretion_rate type="double" units="min">15</motile_cell_chemokine_secretion_rate>
 		<motile_cell_persistence_time type="double" units="min">15</motile_cell_persistence_time>
 		<motile_cell_migration_speed type="double" units="micron/min">0.5</motile_cell_migration_speed> 
 		<motile_cell_relative_adhesion type="double" units="dimensionless">0.05</motile_cell_relative_adhesion>
@@ -168,10 +168,8 @@
 		<motile_cell_relative_cycle_entry_rate type="double" units="dimensionless">0.1</motile_cell_relative_cycle_entry_rate>
 	
 		<!-- chemokine cell type parameters -->
-		<chemotaxis>enabled</chemotaxis>
-		<chemokine_cell_migration_speed type="double" units="micron/min">0.5</chemokine_cell_migration_speed> 
-		<chemokine_cell_secretion_rate type="double" units="min">10</chemokine_cell_secretion_rate>
-		<chemokine_cell_uptake_rate type="double" units="min">3</chemokine_cell_uptake_rate>
+		<chemokine_cell_secretion_rate type="double" units="min">5</chemokine_cell_secretion_rate>
+		<chemokine_cell_secretion_rate type="double" units="min">15</chemokine_cell_secretion_rate>
 	</user_parameters>
 	
 </PhysiCell_settings>
