@@ -141,7 +141,6 @@ void create_cell_types( void )
 
 
 
-
 	// Defining motile_cells
 
 	motile_cell = cell_defaults;
