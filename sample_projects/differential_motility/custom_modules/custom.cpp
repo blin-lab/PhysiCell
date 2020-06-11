@@ -150,10 +150,10 @@ void create_cell_types( void )
 	// Set cell-cell adhesion to 0% of other cells
 	passive_cell.phenotype.mechanics.cell_cell_adhesion_strength *= 0.0;
 	// Set strong resistance to deformation since these are used to enforce confinement //10
-	passive_cell.phenotype.mechanics.cell_cell_repulsion_strength = 10.0;
+	passive_cell.phenotype.mechanics.cell_cell_repulsion_strength = 20.0;
 
 	// set parameter cell_radius 
-	passive_cell.phenotype.geometry.radius = 10;
+	passive_cell.phenotype.geometry.radius = 5;
 	passive_cell.phenotype.death.rates[apoptosis_model_index] = 0.0;
 	// set oxygen uptake / secretion parameters for the default cell type
 	passive_cell.phenotype.secretion.uptake_rates[oxygen_substrate_index] = 0;
@@ -185,6 +185,9 @@ void create_cell_types( void )
 	//cell_radii parameters
 	motile_cell_1.phenotype.geometry.radius = parameters.doubles ("motile_cell_1_radius") ;
 	motile_cell_2.phenotype.geometry.radius = parameters.doubles ("motile_cell_2_radius");
+
+	//change cell interactions?
+
 	
 	// enable random motility 
 	motile_cell_1.phenotype.motility.is_motile = true; 
@@ -275,6 +278,7 @@ void setup_tissue( void )
 
 	Cell* pC;
 
+
 	// Generate passive cells confinement (at the contour of the ellipse)
 	for (int w= -pWidth; w<pWidth; w+= passiveD){
 		for (int h= -pHeight; h<pHeight; h+=passiveD){
@@ -297,6 +301,10 @@ void setup_tissue( void )
 
 
 	// Now generate cells within the ellipse
+
+	//because timepoint 0 was not  random
+	srand((unsigned int)time(NULL));	
+
 	for (int i=0; i<N1; i++){
 		double t = 2*M_PI * ((double) rand() / RAND_MAX) ;
 		double d = sqrt(((double) rand() / RAND_MAX));

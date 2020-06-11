@@ -87,7 +87,7 @@
 	</domain>
 	
 	<overall>
-		<max_time units="min">7200</max_time> <!-- 5 days * 24 h * 60 min -->
+		<max_time units="min">36000</max_time> <!-- 8 days * 24 h * 60 min -->
 		<time_units>min</time_units>
 		<space_units>micron</space_units>
 	
@@ -109,7 +109,7 @@
 		</full_data>
 		
 		<SVG>
-			<interval units="min">60</interval>
+			<interval units="min">1440</interval>
 			<enable>true</enable>
 		</SVG>
 		
@@ -161,7 +161,7 @@
 		
 		<!-- motile cell type parameters --> 
 		
-		<motile_cell_1_persistence_time type="double" units="min">100</motile_cell_1_persistence_time>
+		<motile_cell_1_persistence_time type="double" units="min">500</motile_cell_1_persistence_time>
 		<motile_cell_1_migration_speed type="double" units="micron/min">0.5</motile_cell_1_migration_speed> 
 		<motile_cell_1_migration_bias type="double" units = "dimensionless" > 0.0 </motile_cell_1_migration_bias>
 		<motile_cell_1_relative_adhesion type="double" units="dimensionless">0.0</motile_cell_1_relative_adhesion>
@@ -169,7 +169,7 @@
 		<motile_cell_1_relative_cycle_entry_rate type="double" units="dimensionless">0.0</motile_cell_1_relative_cycle_entry_rate>
 
 
-		<motile_cell_2_persistence_time type="double" units="min">100</motile_cell_2_persistence_time>
+		<motile_cell_2_persistence_time type="double" units="min">500</motile_cell_2_persistence_time>
 		<motile_cell_2_migration_speed type="double" units="micron/min">1.0</motile_cell_2_migration_speed> 
 		<motile_cell_2_relative_adhesion type="double" units="dimensionless">0.0</motile_cell_2_relative_adhesion>
 		<motile_cell_2_apoptosis_rate type="double" units="1/min">0.0</motile_cell_2_apoptosis_rate> 
@@ -187,5 +187,5 @@
 		<motile_cell_2_density type="double" units="dimensionless"> 0.1 </motile_cell_2_density>
 
 	</user_parameters>
-	
+/	
 </PhysiCell_settings>
