@@ -101,6 +101,9 @@ void create_cell_types( void )
 	cell_defaults.phenotype.geometry.polarity = 1.0;
 	cell_defaults.phenotype.motility.restrict_to_2D = true; 
 
+	//added this to see if enables chemotaxis
+	cell_defaults.phenotype.motility.is_motile = true;
+
 	// make sure the defaults are self-consistent. 
 	cell_defaults.phenotype.secretion.sync_to_microenvironment( &microenvironment );
 	cell_defaults.phenotype.molecular.sync_to_microenvironment( &microenvironment );	
@@ -123,6 +126,19 @@ void create_cell_types( void )
 	//cell_defaults.functions.calculate_distance_to_membrane = distance_to_membrane_ellipse;
 	//cell_defaults.functions.add_cell_basement_membrane_interactions = standard_add_basement_membrane_interactions;
 	//cell_defaults.phenotype.mechanics.cell_BM_repulsion_strength = 50.0;
+
+	//This needs to be equal to chemotaxis function?
+	//cell_defaults.functions.update_migration_bias;
+
+	// Need to enable chemotaxis?
+	cell_defaults.phenotype.motility.chemotaxis_index = chemokine_substrate_index;
+	//(1 to go up gradient, -1 to go down gradient)
+	cell_defaults.phenotype.motility.chemotaxis_direction = 1;
+
+	//added in speed parameter
+	cell_defaults.phenotype.motility.migration_speed = parameters.doubles("chemokine_cell_migration_speed");
+
+
 
 
 
@@ -258,10 +274,11 @@ void setup_tissue( void )
 		}
 	}
 
-
+//	const double M_PI = 3.14159265359;
+#define M_PI 3.14159265358979323846264338327
 
 	// generate secrete and sense cells within the ellipse
-	for (int i=0; i<N/2; i++){
+	for (int i=0; i<(N*0.05); i++){
 		double t = 2*M_PI * ((double) rand() / RAND_MAX) ;
 		double d = sqrt(((double) rand() / RAND_MAX));
 		double x = xRadius * d * cos(t);
@@ -272,7 +289,7 @@ void setup_tissue( void )
 	}
 
 	// generate motile cells within the ellipse
-	for (int i=0; i<N/2; i++){
+	for (int i=0; i<(N*0.95); i++){
 			double t = 2*M_PI * ((double) rand() / RAND_MAX) ;
 			double d = sqrt(((double) rand() / RAND_MAX));
 			double x = xRadius * d * cos(t);
@@ -309,8 +326,8 @@ std::vector<std::string> my_coloring_function( Cell* pCell )
 	}
 	else if( pCell->type == 1 )
 	{
-		output[0] = "black";
-		output[2] = "black";
+		output[0] = "blue";
+		output[2] = "blue";
 	}
 	else if( pCell->type == 0 )
 	{

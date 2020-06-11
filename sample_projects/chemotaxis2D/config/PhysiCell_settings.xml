@@ -135,7 +135,7 @@
 		<variable name="chemokine" units="fmol/l" ID="1">
 			<physical_parameter_set>
 				<diffusion_coefficient units="micron^2/min">2000.0</diffusion_coefficient>
-				<decay_rate units="1/min">0.1</decay_rate>  
+				<decay_rate units="1/min">0.5</decay_rate>  
 			</physical_parameter_set>
 			<initial_condition units="fmol/l">0.0</initial_condition>
 			<Dirichlet_boundary_condition units="fmol/l" enabled="false">0.0</Dirichlet_boundary_condition>
@@ -165,8 +165,9 @@
 		<geom_y type="double" units="min">100.0</geom_y>
 		
 		<!-- secretor cell type parameters --> 
-		<chemokine_secretion_rate type="double" units="min">15.0</chemokine_secretion_rate>
-		<chemokine_uptake_rate type="double" units="min">5.0</chemokine_uptake_rate>
+		<chemokine_secretion_rate type="double" units="min">1.0</chemokine_secretion_rate>
+		<chemokine_uptake_rate type="double" units="min">0.7</chemokine_uptake_rate>
+		<chemokine_cell_migration_speed type="double" units="micron/min">0.5</chemokine_cell_migration_speed>
 		
 		<!-- motile cell type parameters --> 
 		<motile_cell_persistence_time type="double" units="min">15</motile_cell_persistence_time>
