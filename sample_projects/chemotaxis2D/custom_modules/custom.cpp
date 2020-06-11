@@ -139,8 +139,11 @@ void create_cell_types( void )
 	motile_cell.phenotype.motility.is_motile = true;
 	motile_cell.phenotype.motility.persistence_time = parameters.doubles( "motile_cell_persistence_time" ); // 15.0;
 	motile_cell.phenotype.motility.migration_speed = parameters.doubles( "motile_cell_migration_speed" ); // 0.25 micron/minute
-	motile_cell.phenotype.motility.migration_bias = 0.0;// completely random
-
+	//motile_cell.phenotype.motility.migration_bias = 0.0;// completely random
+	motile_cell.phenotype.motility.chemotaxis_direction = 1; // up the gradient
+	motile_cell.phenotype.motility.chemotaxis_index = chemokine_substrate_index;
+	motile_cell.phenotype.motility.migration_bias = 1;
+	motile_cell.functions.update_migration_bias = chemotaxis_function;
 	// Set cell-cell adhesion to 5% of other cells
 	// motile_cell.phenotype.mechanics.cell_cell_adhesion_strength *= parameters.doubles( "motile_cell_relative_adhesion" ); // 0.05;
 	// motile_cell.phenotype.mechanics.cell_cell_repulsion_strength *= 50;
@@ -261,7 +264,8 @@ void setup_tissue( void )
 
 
 	// generate secretor cells within the ellipse
-	for (int i=0; i<N/2; i++){
+	int n_secretor = N * 0.1;
+	for (int i=0; i<n_secretor; i++){
 		double t = 2*M_PI * ((double) rand() / RAND_MAX) ;
 		double d = sqrt(((double) rand() / RAND_MAX));
 		double x = xRadius * d * cos(t);
@@ -272,7 +276,8 @@ void setup_tissue( void )
 	}
 
 	// generate motile cells within the ellipse
-	for (int i=0; i<N/2; i++){
+	int n_motile = N * 0.9;
+	for (int i=0; i<n_motile; i++){
 			double t = 2*M_PI * ((double) rand() / RAND_MAX) ;
 			double d = sqrt(((double) rand() / RAND_MAX));
 			double x = xRadius * d * cos(t);
