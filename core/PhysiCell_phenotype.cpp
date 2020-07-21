@@ -611,7 +611,7 @@ Geometry::Geometry()
 	// reference values for MCF-7, based on 
 	// volume = 2494 cubic microns
 	// nuclear volume = 540 cubic microns 
-	radius = 8.412710547954228; 
+	radius = 25; 
 	nuclear_radius = 5.051670902881889; 
 	surface_area = 889.3685284131693; 
 	
@@ -663,6 +663,9 @@ Mechanics::Mechanics()
 {
 	cell_cell_adhesion_strength = 0.4; 
 	cell_BM_adhesion_strength = 4.0;
+	
+	other_cell_adhesion_strength= 2.0;
+	cell_passive_adhesion=0.0;
 	
 	cell_cell_repulsion_strength = 10.0; 
 	cell_BM_repulsion_strength = 10.0; 

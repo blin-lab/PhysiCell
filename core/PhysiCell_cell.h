@@ -135,6 +135,7 @@ class Cell_Definition
 
 extern Cell_Definition cell_defaults; 
 
+
 class Cell_State
 {
  public:
@@ -163,10 +164,16 @@ class Cell : public Basic_Agent
 	Cell_State state; 
 	Phenotype phenotype; 
 	
+
+	
 	void update_motility_vector( double dt_ );
 	void advance_bundled_phenotype_functions( double dt_ ); 
 	
-	void add_potentials(Cell*);       // Add repulsive and adhesive forces.
+	
+	///athina 20.07.2020 -added other_agent
+	void add_potentials(Cell* );       // Add repulsive and adhesive forces.
+	
+	
 	void set_previous_velocity(double xV, double yV, double zV);
 	int get_current_mechanics_voxel_index();
 	void turn_off_reactions(double); 		  // Turn off all the reactions of the cell
@@ -204,6 +211,11 @@ class Cell : public Basic_Agent
 	
 	void assign_orientation();  // if set_orientaion is defined, uses it to assign the orientation
 								// otherwise, it assigns a random orientation to the cell.
+								
+	///athina 20.07.2020
+	double get_adhesion();
+	double adhesion(Cell* other_cell);
+	///end athina 20.07.2020
 	
 	void copy_function_pointers(Cell*);
 	
@@ -213,6 +225,8 @@ class Cell : public Basic_Agent
 	void ingest_cell( Cell* pCell_to_eat ); // for use in predation, e.g., immune cells 
 
 	// I want to eventually deprecate this, by ensuring that 
+	
+	
 	// critical BioFVM and PhysiCell data elements are synced when they are needed 
 	
 	void set_phenotype( Phenotype& phenotype ); // no longer needed?

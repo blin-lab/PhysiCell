@@ -358,6 +358,8 @@ class Mechanics
 	double cell_cell_repulsion_strength;
 	double cell_BM_repulsion_strength; 
 	
+	double cell_passive_adhesion;
+	double other_cell_adhesion_strength;
 	// this is a multiple of the cell (equivalent) radius
 	double relative_maximum_adhesion_distance; 
 	// double maximum_adhesion_distance; // needed? 

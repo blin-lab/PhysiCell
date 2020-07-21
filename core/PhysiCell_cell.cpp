@@ -84,6 +84,7 @@ std::vector<Cell_Definition*> cell_definitions_by_index;
 // in case you want the legacy method 
 std::vector<double> (*cell_division_orientation)(void) = UniformOnUnitSphere; // LegacyRandomOnUnitSphere; 
 
+
 Cell_Parameters::Cell_Parameters()
 {
 	o2_hypoxic_threshold = 15.0; // HIF-1alpha at half-max around 1.5-2%, and tumors often are below 2%
@@ -272,7 +273,6 @@ void Cell::advance_bundled_phenotype_functions( double dt_ )
 		functions.volume_update_function(this,phenotype,dt_); 
 		
 		// The following line is needed in every volume 
-		// regulation method (it sets BioFVM total_volume)
 		
 		set_total_volume( phenotype.volume.total ); 
 	}
@@ -349,8 +349,35 @@ Cell::Cell()
 	
 	set_total_volume( phenotype.volume.total ); 
 	
+
+	
 	return; 
 }
+
+	///begin athina 20.07.2020
+double Cell::get_adhesion()
+
+{
+	if (type==0)
+	
+		return 0;
+	else
+	
+		return 1;
+}
+
+double Cell::adhesion( Cell* other_cell )
+{	
+	double adh = 0;
+	if ( type == other_cell->type)
+		adh = phenotype.mechanics.cell_cell_adhesion_strength;
+	else
+		adh = phenotype.mechanics.other_cell_adhesion_strength;
+		
+	return adh;
+}
+
+///athina 20.07.2020 end
 
 void Cell::flag_for_division( void )
 {
@@ -837,22 +864,61 @@ void Cell::add_potentials(Cell* other_agent)
 	//double max_interactive_distance = parameters.max_interaction_distance_factor * phenotype.geometry.radius + 
 	//	(*other_agent).parameters.max_interaction_distance_factor * (*other_agent).phenotype.geometry.radius;
 		
+		
+		
+		
+	
 	double max_interactive_distance = phenotype.mechanics.relative_maximum_adhesion_distance * phenotype.geometry.radius + 
 		(*other_agent).phenotype.mechanics.relative_maximum_adhesion_distance * (*other_agent).phenotype.geometry.radius;
 		
 	if(distance < max_interactive_distance ) 
 	{	
 		// double temp_a = 1 - distance/max_interactive_distance; 
-		double temp_a = -distance; // -d
-		temp_a /= max_interactive_distance; // -d/S
-		temp_a += 1.0; // 1 - d/S 
-		temp_a *= temp_a; // (1-d/S)^2 
-		// temp_a *= phenotype.mechanics.cell_cell_adhesion_strength; // original 
 		
-		// August 2017 - back to the original if both have same coefficient 
-		double effective_adhesion = sqrt( phenotype.mechanics.cell_cell_adhesion_strength * other_agent->phenotype.mechanics.cell_cell_adhesion_strength ); 
-		temp_a *= effective_adhesion; 
+		///begin athina 20.07.2020
 		
+		double temp_a = 1 - distance/max_interactive_distance; 
+		temp_a *= temp_a; 
+		// hyp: junction strength is limited by weakest cell
+		double adh;
+		double thisadh = get_adhesion();
+		double otadh = other_agent->get_adhesion();
+
+		if ( thisadh == 0 && otadh == 1 )
+		{
+			adh=0;
+			///phenotype.mechanics.cell_passive_adhesion ;
+		}
+		else
+		{
+			// second case, active cell with passive cell
+			if ( thisadh == 1 && otadh == 0 )
+			{
+				adh = 0;
+				//phenotype.mechanics.cell_passive_adhesion ;
+			}
+			else
+			{
+				// passive, passive
+				if ( thisadh == 0 && otadh == 0 )
+				{
+					adh = 0;
+				}
+				// active, active
+				else
+				{
+					adh = ( static_cast<Cell*>(this) )->adhesion( static_cast<Cell*>(other_agent) );
+					///( static_cast<Cell*>(this) )->adhesion( static_cast<Cell*>(other_agent) );
+				}
+			}
+		}
+			
+
+		 
+		temp_a *= adh; 
+		
+		
+		/// end athina 20.07.2020
 		temp_r -= temp_a;
 	}
 	/////////////////////////////////////////////////////////////////

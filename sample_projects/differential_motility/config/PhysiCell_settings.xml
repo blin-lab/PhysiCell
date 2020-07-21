@@ -15,7 +15,7 @@
 # See VERSION.txt or call get_PhysiCell_version() to get the current version  #
 #     x.y.z. Call display_citations() to get detailed information on all cite-#
 #     able software used in your PhysiCell application.                       #
-#                                                                             #
+B#                                                                             #
 # Because PhysiCell extensively uses BioFVM, we suggest you also cite BioFVM  #
 #     as below:                                                               #
 #                                                                             #
@@ -74,10 +74,10 @@
 
 <PhysiCell_settings version="devel-version">
 	<domain>
-		<x_min>-500</x_min>
-		<x_max>500</x_max>
-		<y_min>-500</y_min>
-		<y_max>500</y_max>
+		<x_min>-200</x_min>
+		<x_max>200</x_max>
+		<y_min>-200</y_min>
+		<y_max>200</y_max>
 		<z_min>-10</z_min>
 		<z_max>10</z_max>
 		<dx>20</dx>
@@ -87,7 +87,7 @@
 	</domain>
 	
 	<overall>
-		<max_time units="min">36000</max_time> <!-- 8 days * 24 h * 60 min -->
+		<max_time units="min">2880</max_time> <!-- 2 days * 24 h * 60 min -->
 		<time_units>min</time_units>
 		<space_units>micron</space_units>
 	
@@ -104,12 +104,12 @@
 		<folder>output</folder> <!-- use . for root --> 
 
 		<full_data>
-			<interval units="min">360</interval>
+			<interval units="min">60</interval>
 			<enable>true</enable>
 		</full_data>
 		
 		<SVG>
-			<interval units="min">1440</interval>
+			<interval units="min">360</interval>
 			<enable>true</enable>
 		</SVG>
 		
@@ -120,9 +120,9 @@
 	
 	<options>
 		<legacy_random_points_on_sphere_in_divide>false</legacy_random_points_on_sphere_in_divide>
-	</options>	
+	</options>
 
-	<microenvironment_setup>
+B	<microenvironment_setup>
 		<variable name="oxygen" units="mmHg" ID="0">
 			<physical_parameter_set>
 				<diffusion_coefficient units="micron^2/min">100000.0</diffusion_coefficient>
@@ -161,31 +161,35 @@
 		
 		<!-- motile cell type parameters --> 
 		
-		<motile_cell_1_persistence_time type="double" units="min">500</motile_cell_1_persistence_time>
-		<motile_cell_1_migration_speed type="double" units="micron/min">0.5</motile_cell_1_migration_speed> 
+		<motile_cell_1_persistence_time type="double" units="min">16</motile_cell_1_persistence_time>
+		<motile_cell_1_migration_speed type="double" units="micron/min">1.68</motile_cell_1_migration_speed> 
 		<motile_cell_1_migration_bias type="double" units = "dimensionless" > 0.0 </motile_cell_1_migration_bias>
-		<motile_cell_1_relative_adhesion type="double" units="dimensionless">0.0</motile_cell_1_relative_adhesion>
-		<motile_cell_1_apoptosis_rate type="double" units="1/min">0.0</motile_cell_1_apoptosis_rate> 
-		<motile_cell_1_relative_cycle_entry_rate type="double" units="dimensionless">0.0</motile_cell_1_relative_cycle_entry_rate>
-
-
-		<motile_cell_2_persistence_time type="double" units="min">500</motile_cell_2_persistence_time>
-		<motile_cell_2_migration_speed type="double" units="micron/min">1.0</motile_cell_2_migration_speed> 
-		<motile_cell_2_relative_adhesion type="double" units="dimensionless">0.0</motile_cell_2_relative_adhesion>
-		<motile_cell_2_apoptosis_rate type="double" units="1/min">0.0</motile_cell_2_apoptosis_rate> 
-		<motile_cell_2_migration_bias type="double" units = "dimensionless" > 0.0 </motile_cell_2_migration_bias>
-		<motile_cell_2_relative_cycle_entry_rate type="double" units="dimensionless">0.0</motile_cell_2_relative_cycle_entry_rate>
+		<motile_cell_1_relative_adhesion type="double" units="dimensionless">15.0</motile_cell_1_relative_adhesion>
 		
+		<motile_cell_1_relative_repulsion type="double" units="dimensionless">10.0</motile_cell_1_relative_repulsion>
+
+		<motile_cell_2_persistence_time type="double" units="min">14</motile_cell_2_persistence_time>
+		<motile_cell_2_migration_speed type="double" units="micron/min">2.95</motile_cell_2_migration_speed> 
+		<motile_cell_2_relative_adhesion type="double" units="dimensionless">0.0</motile_cell_2_relative_adhesion>
+		
+		<motile_cell_2_migration_bias type="double" units = "dimensionless" > 0.0 </motile_cell_2_migration_bias>
+		
+		<motile_cell_2_relative_repulsion type="double" units="dimensionless">10.0</motile_cell_2_relative_repulsion>
+
 		<motile_cell_1_radius type="double" units="microns"> 8.5 </motile_cell_1_radius>
 		<motile_cell_2_radius type="double" units="microns"> 8.5 </motile_cell_2_radius>
 		<!-- geometry parameters -->
-		<x_rad type = "double" units = "microns"> 400 </x_rad>
-		<y_rad type = "double" units = "microns"> 100 </y_rad>
+		<x_rad type = "double" units = "microns"> 180 </x_rad>
+		<y_rad type = "double" units = "microns"> 60 </y_rad>
 		
 		<!-- cell densities -->
-		<motile_cell_1_density type="double" units="dimensionless"> 0.4 </motile_cell_1_density>
-		<motile_cell_2_density type="double" units="dimensionless"> 0.1 </motile_cell_2_density>
+		<motile_cell_1_density type="double" units="dimensionless"> 0.80 </motile_cell_1_density>
+		<motile_cell_2_density type="double" units="dimensionless"> 0.10 </motile_cell_2_density>
 
+
+		<!-- new parameters for adhesion -->
+		<heterotypic_adhesion_1 type="double" units="dimensionless"> 15.0 </heterotypic_adhesion_1>
+		<heterotypic_adhesion_2 type="double" units="dimensionless"> 15.0 </heterotypic_adhesion_2>
 	</user_parameters>
 /	
 </PhysiCell_settings>

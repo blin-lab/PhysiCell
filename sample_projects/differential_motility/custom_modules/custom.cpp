@@ -107,7 +107,7 @@ void create_cell_types( void )
 	cell_defaults.functions.set_orientation = up_orientation; 
 	cell_defaults.phenotype.geometry.polarity = 1.0;
 	cell_defaults.phenotype.motility.restrict_to_2D = true; 
-
+	
 	// make sure the defaults are self-consistent. 
 
 	cell_defaults.phenotype.secretion.sync_to_microenvironment( &microenvironment );
@@ -132,7 +132,10 @@ void create_cell_types( void )
 	cell_defaults.phenotype.secretion.secretion_rates[oxygen_substrate_index] = 0; 
 	cell_defaults.phenotype.secretion.saturation_densities[oxygen_substrate_index] = 38; 
 
+
+
 	// add custom data here, if any 
+
 
 	// Defining passive cells
 	passive_cell = cell_defaults;
@@ -150,10 +153,10 @@ void create_cell_types( void )
 	// Set cell-cell adhesion to 0% of other cells
 	passive_cell.phenotype.mechanics.cell_cell_adhesion_strength *= 0.0;
 	// Set strong resistance to deformation since these are used to enforce confinement //10
-	passive_cell.phenotype.mechanics.cell_cell_repulsion_strength = 20.0;
+	passive_cell.phenotype.mechanics.cell_cell_repulsion_strength = 5.0;
 
 	// set parameter cell_radius 
-	passive_cell.phenotype.geometry.radius = 5;
+	passive_cell.phenotype.geometry.radius = 2.0;
 	passive_cell.phenotype.death.rates[apoptosis_model_index] = 0.0;
 	// set oxygen uptake / secretion parameters for the default cell type
 	passive_cell.phenotype.secretion.uptake_rates[oxygen_substrate_index] = 0;
@@ -194,24 +197,42 @@ void create_cell_types( void )
 	motile_cell_1.phenotype.motility.persistence_time = parameters.doubles( "motile_cell_1_persistence_time" ); // 15.0; 
 	motile_cell_1.phenotype.motility.migration_speed = parameters.doubles( "motile_cell_1_migration_speed" ); // 0.25 micron/minute 
 	motile_cell_1.phenotype.motility.migration_bias = parameters.doubles (" motile_cell_1_migration_bias");// initially set to 0 for completely random
+	motile_cell_1.phenotype.volume.fluid_fraction = 0.5;
 	
 	motile_cell_2.phenotype.motility.is_motile = true; 
 	motile_cell_2.phenotype.motility.persistence_time = parameters.doubles( "motile_cell_2_persistence_time" ); // 15.0; 
 	motile_cell_2.phenotype.motility.migration_speed = parameters.doubles( "motile_cell_2_migration_speed" ); // 0.25 micron/minute 
 	motile_cell_2.phenotype.motility.migration_bias = parameters.doubles (" motile_cell_2_migration_bias");// initially set to 0 for completely random
-
+	motile_cell_2.phenotype.volume.fluid_fraction = 0.5;
+	
 	// Set cell-cell adhesion to 5% of other cells 
 	motile_cell_1.phenotype.mechanics.cell_cell_adhesion_strength *= parameters.doubles( "motile_cell_1_relative_adhesion" ); // 0.05; 
 	motile_cell_2.phenotype.mechanics.cell_cell_adhesion_strength *= parameters.doubles( "motile_cell_2_relative_adhesion" );
+	motile_cell_1.phenotype.mechanics.cell_cell_repulsion_strength = parameters.doubles( "motile_cell_1_relative_repulsion");
+	motile_cell_2.phenotype.mechanics.cell_cell_repulsion_strength = parameters.doubles( "motile_cell_2_relative_repulsion");
+	
+
+    ///NEW NEW
+    
+    motile_cell_1.phenotype.mechanics.other_cell_adhesion_strength *= parameters.doubles ("heterotypic_adhesion_1");
+    motile_cell_2.phenotype.mechanics.other_cell_adhesion_strength *= parameters.doubles ("heterotypic_adhesion_2");
+    
+	//motile_cell_1.phenotype.mechanics.cell_passive_adhesion *= 0;
+	//motile_cell_2.phenotype.mechanics.cell_passive_adhesion *= 0;
+
+
 	// Set apoptosis to zero 
-	motile_cell_1.phenotype.death.rates[apoptosis_model_index] = parameters.doubles( "motile_cell_1_apoptosis_rate" ); // 0.0; 
-	motile_cell_2.phenotype.death.rates[apoptosis_model_index] = parameters.doubles( "motile_cell_1_apoptosis_rate" ); // 0.0;
+	//motile_cell_1.phenotype.death.rates[apoptosis_model_index] = 0.0;
+///parameters.doubles( "motile_cell_1_apoptosis_rate" ); // 0.0; 
+	//motile_cell_2.phenotype.death.rates[apoptosis_model_index] = 0.0; 
+
+/// parameters.doubles( "motile_cell_1_apoptosis_rate" ); // 0.0;
 	// Set proliferation rate 
 	
 	// Alter the transition rate from G0G1 state to S state
-	motile_cell_1.phenotype.cycle.data.transition_rate(G0G1_index,S_index) *= parameters.doubles( "motile_cell_1_relative_cycle_entry_rate" );  //set to 0 for no division
+	///motile_cell_1.phenotype.cycle.data.transition_rate(G0G1_index,S_index) *= parameters.doubles( "motile_cell_1_relative_cycle_entry_rate" );  //set to 0 for no division
 
-	motile_cell_2.phenotype.cycle.data.transition_rate(G0G1_index,S_index) *= parameters.doubles( "motile_cell_2_relative_cycle_entry_rate" );  //set to 0 for no division
+	///motile_cell_2.phenotype.cycle.data.transition_rate(G0G1_index,S_index) *= parameters.doubles( "motile_cell_2_relative_cycle_entry_rate" );  //set to 0 for no division
 
 
 	build_cell_definitions_maps(); 
@@ -262,15 +283,16 @@ void setup_tissue( void )
 	
 	const double N1 = (double) motile_cell_1_density* ellipse_area/(M_PI*pow(motile_cell_1.phenotype.geometry.radius,2)); //total number of motile_1 cells
 	const double N2 = (double) motile_cell_2_density*ellipse_area/(M_PI*pow(motile_cell_2.phenotype.geometry.radius,2)); //total number of motile_2 cells
-	
+	std::cout << N1 <<  std::endl;
+	std::cout << N2 << std::endl;
 	
 /*	const int N = 100;  */
 	const double passiveRad = passive_cell.phenotype.geometry.radius; // radius of passive cell
 	const double passiveD = 2*passiveRad; // diameter of passive cell
 
 	// domain for passive cells
-	const int pWidth = xRadius + 6 * passiveRad;
-	const int pHeight = yRadius + 6 * passiveRad;
+	const int pWidth = xRadius + 3 * passiveRad;
+	const int pHeight = yRadius + 3 * passiveRad;
 
 	const double xR_squared = pow(xRadius,2);
 	const double yR_squared = pow(yRadius,2);
@@ -293,6 +315,7 @@ void setup_tissue( void )
 				pC = create_cell(passive_cell);
 				pC->assign_position( w, h, 0.0 );
 				pC->is_movable=false;
+				
 			}
 
 
@@ -323,7 +346,7 @@ void setup_tissue( void )
 		double y = yRadius * d * sin(t);
 
 		pC = create_cell( motile_cell_2);
-		pC->assign_position( x, y, 0.0 );
+		pC->assign_position( x, y, 0.0 ); 
 	}
 
 	return; 
