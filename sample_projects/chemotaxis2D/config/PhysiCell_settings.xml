@@ -134,7 +134,7 @@
 		
 		<variable name="chemokine" units="fmol/l" ID="1">
 			<physical_parameter_set>
-				<diffusion_coefficient units="micron^2/min">2000.0</diffusion_coefficient>
+				<diffusion_coefficient units="micron^2/min">500.0</diffusion_coefficient>
 				<decay_rate units="1/min">0.1</decay_rate>  
 			</physical_parameter_set>
 			<initial_condition units="fmol/l">0.0</initial_condition>
@@ -164,11 +164,18 @@
 		<geom_x type="double" units="min">400.0</geom_x>
 		<geom_y type="double" units="min">100.0</geom_y>
 		
-		<!-- secretor cell type parameters --> 
-		<chemokine_secretion_rate type="double" units="min">15.0</chemokine_secretion_rate>
-		<chemokine_uptake_rate type="double" units="min">0.0</chemokine_uptake_rate>
+		<!-- Number of live cells -->
+		<cell_number type="double" units="dimensionless">300</cell_number>
+		<secretor_proportion type="double" units="dimensionless">0.5</secretor_proportion>
 		
-		<!-- motile cell type parameters --> 
+		
+		<!-- secretor cell type parameters --> 		
+		<chemokine_secretion_rate type="double" units="min">15.0</chemokine_secretion_rate>
+		<chemokine_uptake_rate type="double" units="min">0.1</chemokine_uptake_rate>
+		
+		<chemotaxis_direction type="double" units="dimensionless">1.0</chemotaxis_direction>
+		<migration_bias type="double" units="dimensionless">0.75</migration_bias>
+		
 		<motile_cell_persistence_time type="double" units="min">15</motile_cell_persistence_time>
 		<motile_cell_migration_speed type="double" units="micron/min">0.5</motile_cell_migration_speed> 
 		<motile_cell_relative_adhesion type="double" units="dimensionless">0.05</motile_cell_relative_adhesion>

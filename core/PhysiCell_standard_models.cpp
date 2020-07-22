@@ -612,7 +612,7 @@ void standard_update_cell_velocity( Cell* pCell, Phenotype& phenotype, double dt
 	return; 
 }
 
-void standard_add_basement_membrane_interactions( Cell* pCell, Phenotype phenotype, double dt )
+void standard_add_basement_membrane_interactions( Cell* pCell, Phenotype& phenotype, double dt )
 {
 	if( pCell->functions.calculate_distance_to_membrane == NULL )
 	{ return; }

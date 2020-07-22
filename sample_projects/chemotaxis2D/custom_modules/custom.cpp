@@ -140,9 +140,9 @@ void create_cell_types( void )
 	motile_cell.phenotype.motility.persistence_time = parameters.doubles( "motile_cell_persistence_time" ); // 15.0;
 	motile_cell.phenotype.motility.migration_speed = parameters.doubles( "motile_cell_migration_speed" ); // 0.25 micron/minute
 	//motile_cell.phenotype.motility.migration_bias = 0.0;// completely random
-	motile_cell.phenotype.motility.chemotaxis_direction = 1; // up the gradient
+	motile_cell.phenotype.motility.chemotaxis_direction = parameters.doubles( "chemotaxis_direction" ); // up the gradient
 	motile_cell.phenotype.motility.chemotaxis_index = chemokine_substrate_index;
-	motile_cell.phenotype.motility.migration_bias = 1;
+	motile_cell.phenotype.motility.migration_bias = parameters.doubles( "migration_bias" );
 	motile_cell.functions.update_migration_bias = chemotaxis_function;
 	// Set cell-cell adhesion to 5% of other cells
 	// motile_cell.phenotype.mechanics.cell_cell_adhesion_strength *= parameters.doubles( "motile_cell_relative_adhesion" ); // 0.05;
@@ -225,7 +225,7 @@ void setup_tissue( void )
 
 	const double xRadius = parameters.doubles("geom_x");
 	const double yRadius = parameters.doubles("geom_y");
-	const int N = 200;
+	const int N = parameters.doubles("cell_number");
 	const double passiveRad = parameters.doubles("passive_cell_radius"); // radius of passive cell
 	const double passiveD = passiveRad * 2; // diameter of passive cell
 
@@ -264,26 +264,26 @@ void setup_tissue( void )
 
 
 	// generate secretor cells within the ellipse
-	int n_secretor = N * 0.1;
+	int n_secretor = N * parameters.doubles("secretor_proportion");
 	for (int i=0; i<n_secretor; i++){
 		double t = 2*M_PI * ((double) rand() / RAND_MAX) ;
 		double d = sqrt(((double) rand() / RAND_MAX));
 		double x = xRadius * d * cos(t);
 		double y = yRadius * d * sin(t);
 
-		pC = create_cell( cell_defaults );
+		pC = create_cell( motile_cell );
 		pC->assign_position( x, y, 0.0 );
 	}
 
-	// generate motile cells within the ellipse
-	int n_motile = N * 0.9;
+	// generate non responsive cells
+	int n_motile = N * (1.0 - parameters.doubles("secretor_proportion"));
 	for (int i=0; i<n_motile; i++){
 			double t = 2*M_PI * ((double) rand() / RAND_MAX) ;
 			double d = sqrt(((double) rand() / RAND_MAX));
 			double x = xRadius * d * cos(t);
 			double y = yRadius * d * sin(t);
 
-			pC = create_cell( motile_cell );
+			pC = create_cell( cell_defaults );
 			pC->assign_position( x, y, 0.0 );
 		}
 
