@@ -53,7 +53,7 @@ B#                                                                             #
 # software without specific prior written permission.                         #
 #                                                                             #
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" #
-# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE   #
+B# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE   #
 # IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE  #
 # ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE   #
 # LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR         #
@@ -164,7 +164,7 @@ B	<microenvironment_setup>
 		<motile_cell_1_persistence_time type="double" units="min">16</motile_cell_1_persistence_time>
 		<motile_cell_1_migration_speed type="double" units="micron/min">1.68</motile_cell_1_migration_speed> 
 		<motile_cell_1_migration_bias type="double" units = "dimensionless" > 0.0 </motile_cell_1_migration_bias>
-		<motile_cell_1_relative_adhesion type="double" units="dimensionless">15.0</motile_cell_1_relative_adhesion>
+		<motile_cell_1_relative_adhesion type="double" units="dimensionless">0.0</motile_cell_1_relative_adhesion>
 		
 		<motile_cell_1_relative_repulsion type="double" units="dimensionless">10.0</motile_cell_1_relative_repulsion>
 
@@ -188,8 +188,11 @@ B	<microenvironment_setup>
 
 
 		<!-- new parameters for adhesion -->
-		<heterotypic_adhesion_1 type="double" units="dimensionless"> 15.0 </heterotypic_adhesion_1>
-		<heterotypic_adhesion_2 type="double" units="dimensionless"> 15.0 </heterotypic_adhesion_2>
+		<!-- <heterotypic_adhesion_1 type="double" units="dimensionless"> 0.0 </heterotypic_adhesion_1>
+		<heterotypic_adhesion_2 type="double" units="dimensionless"> 0.0 </heterotypic_adhesion_2> -->
+
+		<ad_distance_1 type="double" units="dimensionless"> 1.25 </ad_distance_1>
+		<ad_distance_2 type="double" units="dimensionless"> 1.25 </ad_distance_2>
 	</user_parameters>
 /	
 </PhysiCell_settings>

@@ -354,7 +354,7 @@ Cell::Cell()
 	return; 
 }
 
-	///begin athina 20.07.2020
+	///AD - added 20.07.2020, copied and slightly altered from PhysiBoSS code. 
 double Cell::get_adhesion()
 
 {
@@ -366,18 +366,19 @@ double Cell::get_adhesion()
 		return 1;
 }
 
+///added heterotypic adhesion
 double Cell::adhesion( Cell* other_cell )
 {	
 	double adh = 0;
 	if ( type == other_cell->type)
 		adh = phenotype.mechanics.cell_cell_adhesion_strength;
 	else
-		adh = phenotype.mechanics.other_cell_adhesion_strength;
+		adh = phenotype.mechanics.heterotypic_adhesion_strength;
 		
 	return adh;
 }
 
-///athina 20.07.2020 end
+///AD - end
 
 void Cell::flag_for_division( void )
 {
@@ -875,7 +876,7 @@ void Cell::add_potentials(Cell* other_agent)
 	{	
 		// double temp_a = 1 - distance/max_interactive_distance; 
 		
-		///begin athina 20.07.2020
+		///AD - added 20.07.2020, copied and slightly altered from PhysiBoSS code. 
 		
 		double temp_a = 1 - distance/max_interactive_distance; 
 		temp_a *= temp_a; 
@@ -918,7 +919,7 @@ void Cell::add_potentials(Cell* other_agent)
 		temp_a *= adh; 
 		
 		
-		/// end athina 20.07.2020
+		///AD - end
 		temp_r -= temp_a;
 	}
 	/////////////////////////////////////////////////////////////////

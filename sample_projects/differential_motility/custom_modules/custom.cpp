@@ -214,9 +214,11 @@ void create_cell_types( void )
 
     ///NEW NEW
     
-    motile_cell_1.phenotype.mechanics.other_cell_adhesion_strength *= parameters.doubles ("heterotypic_adhesion_1");
-    motile_cell_2.phenotype.mechanics.other_cell_adhesion_strength *= parameters.doubles ("heterotypic_adhesion_2");
-    
+     //   motile_cell_1.phenotype.mechanics.other_cell_adhesion_strength *= parameters.doubles ("heterotypic_adhesion_1");
+       // motile_cell_2.phenotype.mechanics.other_cell_adhesion_strength *= parameters.doubles ("heterotypic_adhesion_2");
+
+	motile_cell_1.phenotype.mechanics.relative_maximum_adhesion_distance = parameters.doubles ("ad_distance_1");
+	motile_cell_2.phenotype.mechanics.relative_maximum_adhesion_distance = parameters.doubles ("ad_distance_2");    
 	//motile_cell_1.phenotype.mechanics.cell_passive_adhesion *= 0;
 	//motile_cell_2.phenotype.mechanics.cell_passive_adhesion *= 0;
 

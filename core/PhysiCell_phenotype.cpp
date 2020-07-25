@@ -664,7 +664,6 @@ Mechanics::Mechanics()
 	cell_cell_adhesion_strength = 0.4; 
 	cell_BM_adhesion_strength = 4.0;
 	
-	other_cell_adhesion_strength= 2.0;
 	cell_passive_adhesion=0.0;
 	
 	cell_cell_repulsion_strength = 10.0; 
@@ -674,6 +673,8 @@ Mechanics::Mechanics()
 	relative_maximum_adhesion_distance = 1.25; 
 	// maximum_adhesion_distance = 0.0; 
 	
+	///AD - 25.07.2020 added default heterotypic adhesion = half of homotypic adhesion
+	heterotypic_adhesion_strength = 0.2;
 	return; 
 }
 
