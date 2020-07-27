@@ -197,13 +197,13 @@ void create_cell_types( void )
 	motile_cell_1.phenotype.motility.persistence_time = parameters.doubles( "motile_cell_1_persistence_time" ); // 15.0; 
 	motile_cell_1.phenotype.motility.migration_speed = parameters.doubles( "motile_cell_1_migration_speed" ); // 0.25 micron/minute 
 	motile_cell_1.phenotype.motility.migration_bias = parameters.doubles (" motile_cell_1_migration_bias");// initially set to 0 for completely random
-	motile_cell_1.phenotype.volume.fluid_fraction = 0.5;
+	motile_cell_1.phenotype.volume.fluid_fraction = 0.25;
 	
 	motile_cell_2.phenotype.motility.is_motile = true; 
 	motile_cell_2.phenotype.motility.persistence_time = parameters.doubles( "motile_cell_2_persistence_time" ); // 15.0; 
 	motile_cell_2.phenotype.motility.migration_speed = parameters.doubles( "motile_cell_2_migration_speed" ); // 0.25 micron/minute 
 	motile_cell_2.phenotype.motility.migration_bias = parameters.doubles (" motile_cell_2_migration_bias");// initially set to 0 for completely random
-	motile_cell_2.phenotype.volume.fluid_fraction = 0.5;
+	motile_cell_2.phenotype.volume.fluid_fraction = 0.25;
 	
 	// Set cell-cell adhesion to 5% of other cells 
 	motile_cell_1.phenotype.mechanics.cell_cell_adhesion_strength *= parameters.doubles( "motile_cell_1_relative_adhesion" ); // 0.05; 
@@ -214,8 +214,8 @@ void create_cell_types( void )
 
     ///NEW NEW
     
-     //   motile_cell_1.phenotype.mechanics.other_cell_adhesion_strength *= parameters.doubles ("heterotypic_adhesion_1");
-       // motile_cell_2.phenotype.mechanics.other_cell_adhesion_strength *= parameters.doubles ("heterotypic_adhesion_2");
+        motile_cell_1.phenotype.mechanics.heterotypic_adhesion_strength *= parameters.doubles ("heterotypic_adhesion_1");
+        motile_cell_2.phenotype.mechanics.heterotypic_adhesion_strength *= parameters.doubles ("heterotypic_adhesion_2");
 
 	motile_cell_1.phenotype.mechanics.relative_maximum_adhesion_distance = parameters.doubles ("ad_distance_1");
 	motile_cell_2.phenotype.mechanics.relative_maximum_adhesion_distance = parameters.doubles ("ad_distance_2");    
@@ -304,8 +304,8 @@ void setup_tissue( void )
 
 
 	// Generate passive cells confinement (at the contour of the ellipse)
-	for (int w= -pWidth; w<pWidth; w+= passiveD){
-		for (int h= -pHeight; h<pHeight; h+=passiveD){
+	for (int w= -pWidth; w<pWidth+passiveD; w+= passiveD){
+		for (int h= -pHeight; h<pHeight+passiveD; h+=passiveD){
 
 			// Check if point is within ellipse
 

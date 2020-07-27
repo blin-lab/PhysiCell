@@ -161,15 +161,15 @@ B	<microenvironment_setup>
 		
 		<!-- motile cell type parameters --> 
 		
-		<motile_cell_1_persistence_time type="double" units="min">16</motile_cell_1_persistence_time>
-		<motile_cell_1_migration_speed type="double" units="micron/min">1.68</motile_cell_1_migration_speed> 
+		<motile_cell_1_persistence_time type="double" units="min">45</motile_cell_1_persistence_time>
+		<motile_cell_1_migration_speed type="double" units="micron/min">4.5</motile_cell_1_migration_speed> 
 		<motile_cell_1_migration_bias type="double" units = "dimensionless" > 0.0 </motile_cell_1_migration_bias>
 		<motile_cell_1_relative_adhesion type="double" units="dimensionless">0.0</motile_cell_1_relative_adhesion>
 		
 		<motile_cell_1_relative_repulsion type="double" units="dimensionless">10.0</motile_cell_1_relative_repulsion>
 
-		<motile_cell_2_persistence_time type="double" units="min">14</motile_cell_2_persistence_time>
-		<motile_cell_2_migration_speed type="double" units="micron/min">2.95</motile_cell_2_migration_speed> 
+		<motile_cell_2_persistence_time type="double" units="min">15</motile_cell_2_persistence_time>
+		<motile_cell_2_migration_speed type="double" units="micron/min">1.5</motile_cell_2_migration_speed> 
 		<motile_cell_2_relative_adhesion type="double" units="dimensionless">0.0</motile_cell_2_relative_adhesion>
 		
 		<motile_cell_2_migration_bias type="double" units = "dimensionless" > 0.0 </motile_cell_2_migration_bias>
@@ -193,6 +193,9 @@ B	<microenvironment_setup>
 
 		<ad_distance_1 type="double" units="dimensionless"> 1.25 </ad_distance_1>
 		<ad_distance_2 type="double" units="dimensionless"> 1.25 </ad_distance_2>
+		<heterotypic_adhesion_1 type="double" units= "dimensionless"> 0.0 </heterotypic_adhesion_1>
+		<heterotypic_adhesion_2 type="double" units="dimensionless" > 0.0 </heterotypic_adhesion_2>
+		
 	</user_parameters>
 /	
 </PhysiCell_settings>
